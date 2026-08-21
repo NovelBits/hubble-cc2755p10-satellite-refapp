@@ -1,0 +1,12 @@
+# Generated at bake time — never commit (src/key.c holds your device key)
+src/key.c
+src/time.c
+# Secrets
+*.env
+*.key
+*.b64
+# Build artifacts
+build/
+# Caches
+__pycache__/
+.DS_Store
