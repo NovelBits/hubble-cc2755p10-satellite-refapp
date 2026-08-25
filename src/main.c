@@ -35,7 +35,7 @@ icall_userCfg_t user0Cfg = BLE_USER_CFG;
 #include <hubble/sat/packet.h>
 
 #include "app_ble.h"
-#include "telemetry.h"
+#include "telemetry_source.h"
 
 #define US_PER_SEC 1000000ULL
 #define US_PER_MS  1000ULL
@@ -215,19 +215,18 @@ void *main_thread_entry(void *arg0)
 		 * capture can be matched to the backend, the satellite analogue
 		 * of the terrestrial post's device-to-cloud trace.
 		 */
-		uint16_t battery_mv = BatteryMonitor_getVoltage();
-		int16_t temp_c = Temperature_getTemperature();
-		uint8_t battery_pct = battery_percent(battery_mv);
-		uint8_t payload[TELEMETRY_PAYLOAD_LEN];
+		struct telemetry_reading tlm;
 
-		pack_telemetry(battery_pct, battery_mv, temp_c, payload);
+		telemetry_sample(&tlm);
 
 		Log_printf(Log_Dual_Stack, Log_INFO,
 			   "Telemetry: battery=%u mV (%u%%), temp=%d C, payload=%02X%02X%02X%02X",
-			   battery_mv, battery_pct, temp_c, payload[0],
-			   payload[1], payload[2], payload[3]);
+			   tlm.battery_mv, tlm.battery_pct, tlm.temp_c,
+			   tlm.payload[0], tlm.payload[1], tlm.payload[2],
+			   tlm.payload[3]);
 
-		ret = hubble_sat_packet_get(&packet, payload, sizeof(payload));
+		ret = hubble_sat_packet_get(&packet, tlm.payload,
+					    sizeof(tlm.payload));
 		if (ret != 0) {
 			Log_printf(Log_Dual_Stack, Log_ERROR,
 				   "Failed to get satellite packet, err: %d",

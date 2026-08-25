@@ -32,6 +32,7 @@ endif
 OBJECTS = $(addprefix $(BUILD_DIR)/, \
 	app_main.obj \
 	app_hubble_ti_crypto.obj \
+	app_telemetry_source.obj \
 	app_ble.obj \
 	common_Services_dev_info_dev_info_service.obj \
 	common_BLEAppUtil_bleapputil_task.obj \
@@ -168,6 +169,10 @@ $(BUILD_DIR)/app_main.obj: src/main.c $(SYSCFG_H_FILES) $(BUILD_DIR)
 	$(V) $(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/app_ble.obj: src/app_ble.c $(SYSCFG_H_FILES) $(BUILD_DIR)
+	@ echo Building $@
+	$(V) $(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/app_telemetry_source.obj: src/telemetry_source.c src/telemetry_source.h src/telemetry.h $(SYSCFG_H_FILES) $(BUILD_DIR)
 	@ echo Building $@
 	$(V) $(CC) $(CFLAGS) -c $< -o $@
 

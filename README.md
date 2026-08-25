@@ -9,6 +9,7 @@ This is Hubble's stock `sat-dual-stack` sample with a small set of changes: it r
 | File | Change |
 |---|---|
 | `src/telemetry.h` | **New.** Header-only, pure C: `battery_percent()` and `pack_telemetry()`. No TI or RTOS dependencies, so the packing logic is host-testable. |
+| `src/telemetry_source.h` / `.c` | **New.** Reads the on-chip supply voltage and die temperature and packs the payload. Separate from `telemetry.h` on purpose: the driver calls live here so `telemetry.h` stays host-testable. Both the satellite and terrestrial paths call `telemetry_sample()`. |
 | `src/main.c` | Reads the BatteryMonitor and Temperature drivers each pass, packs the 4 bytes, logs them, and hands the payload to the satellite API. |
 | `test/test_pack.c` | **New.** Host unit test for the packing and percent logic. |
 | `sat-dual-stack-cc27.syscfg` | Adds the `/ti/drivers/BatteryMonitor` and `/ti/drivers/Temperature` modules. |
@@ -32,7 +33,9 @@ make -f cc2755p10.mk            # normal build
 make -f cc2755p10.mk DEBUG=1    # bench build: schedules a fake pass every 120 s
 ```
 
-The first build emits exactly one warning, the dummy-key warning. Bake your device key with the Hubble SDK's `embed_key_time.py` to generate `src/key.c`, then rebuild and the warning is gone. Flash `build/sat-dual-stack.hex` with UniFlash.
+The first build emits exactly one warning, the dummy-key warning. Bake your device key with the Hubble SDK's `embed_key_time.py` to generate `src/key.c`, then rebuild and the warning is gone. Flash `build/sat-dual-stack.hex` with the **UniFlash GUI**: select the CC2755P10 with an XDS110 probe and let UniFlash build the session for you.
+
+> **Use the GUI, not the `dslite.sh` command line.** On this board the CLI fails with *"Can't generate board data file ... An invalid processor ID has been found"* even with the probe enumerating correctly. Verified 2026-08-25 against UniFlash 9.6.0.5764, with the probe present, the board-data cache cleared, `TGT VDD` on `XDS`, and both SWD-mode settings tried. The GUI flashes the same hex without complaint.
 
 ## Host test (no board needed)
 
@@ -44,3 +47,11 @@ clang -std=c11 -Wall -Wextra -Werror test/test_pack.c -o /tmp/test_pack && /tmp/
 ## Tutorial
 
 Full walkthrough: (link to the published Novel Bits tutorial)
+
+## Licensing
+
+Apache-2.0, see `LICENSE`.
+
+This app is a modification of Hubble Network's stock `sat-dual-stack` sample and also carries files
+from Texas Instruments under BSD-3-Clause. Every source file keeps its own header, and
+`THIRD-PARTY-NOTICES.md` lists which files belong to whom and reproduces TI's notice.

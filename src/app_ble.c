@@ -17,6 +17,7 @@
 #include <hubble/sat/pass_prediction.h>
 
 #include "app_ble.h"
+#include "telemetry_source.h"
 
 #define HUBBLE_BLE_UUID_CONNECTABLE 0xFCA7
 #define HUBBLE_BLE_BUFFER_LEN       31U
@@ -315,9 +316,19 @@ static void _ble_adv_update(void *arg)
 {
 	(void)arg;
 
+	/*
+	 * Carry the same 4-byte telemetry the satellite path sends. Sampled here,
+	 * so the terrestrial reading refreshes once per rebuild
+	 * (HUBBLE_ADV_PACKET_PERIOD, one hour) rather than on a timer of its own.
+	 */
+	struct telemetry_reading tlm;
+
+	telemetry_sample(&tlm);
+
 	size_t len = HUBBLE_BLE_BUFFER_LEN - BLE_ADV_HEADER_SIZE;
 	int status = hubble_ble_advertise_get(
-		NULL, 0, &_beacon_adv_data[BLE_ADV_HEADER_SIZE], &len);
+		tlm.payload, sizeof(tlm.payload),
+		&_beacon_adv_data[BLE_ADV_HEADER_SIZE], &len);
 
 	if (status) {
 		Log_printf(Log_Dual_Stack, Log_ERROR,
@@ -374,9 +385,19 @@ static void _beacon_stop(void)
 
 static void _beacon_start(void)
 {
+	/*
+	 * Carry the same 4-byte telemetry the satellite path sends. Sampled here,
+	 * so the terrestrial reading refreshes once per rebuild
+	 * (HUBBLE_ADV_PACKET_PERIOD, one hour) rather than on a timer of its own.
+	 */
+	struct telemetry_reading tlm;
+
+	telemetry_sample(&tlm);
+
 	size_t len = HUBBLE_BLE_BUFFER_LEN - BLE_ADV_HEADER_SIZE;
 	int status = hubble_ble_advertise_get(
-		NULL, 0, &_beacon_adv_data[BLE_ADV_HEADER_SIZE], &len);
+		tlm.payload, sizeof(tlm.payload),
+		&_beacon_adv_data[BLE_ADV_HEADER_SIZE], &len);
 
 	if (status) {
 		Log_printf(Log_Dual_Stack, Log_ERROR,
