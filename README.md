@@ -35,7 +35,20 @@ make -f cc2755p10.mk DEBUG=1    # bench build: schedules a fake pass every 120 s
 
 The first build emits exactly one warning, the dummy-key warning. Bake your device key with the Hubble SDK's `embed_key_time.py` to generate `src/key.c`, then rebuild and the warning is gone. Flash `build/sat-dual-stack.hex` with the **UniFlash GUI**: select the CC2755P10 with an XDS110 probe and let UniFlash build the session for you.
 
-> **Use the GUI, not the `dslite.sh` command line.** On this board the CLI fails with *"Can't generate board data file ... An invalid processor ID has been found"* even with the probe enumerating correctly. Verified 2026-08-25 against UniFlash 9.6.0.5764, with the probe present, the board-data cache cleared, `TGT VDD` on `XDS`, and both SWD-mode settings tried. The GUI flashes the same hex without complaint.
+> **We flash with the GUI.** We did not get the `dslite.sh` command-line path working on this board: it stopped at *"Can't generate board data file ... An invalid processor ID has been found"*, with the probe enumerating correctly, the board-data cache cleared, `TGT VDD` on `XDS`, and both SWD-mode settings tried (UniFlash 9.6.0.5764, 2026-08-25). We did not chase it further, because the GUI flashes the same hex without complaint. If you have the CLI working against a CC2755P10, we would like to hear how.
+
+## A note on `CONFIG_HUBBLE_SAT_NETWORK_DEVICE_TDR`
+
+`src/hubble_config.h` carries `#define CONFIG_HUBBLE_SAT_NETWORK_DEVICE_TDR 500`, and that value is
+**not the one your build uses.** It is overridden at build time: check
+`build/ti_utils_build_compiler.opt` after a build and you will find `-DCONFIG_HUBBLE_SAT_NETWORK_DEVICE_TDR=10`.
+
+The distinction matters if you are checking the tutorial's arithmetic. TDR is the assumed clock-drift
+rate in ppm, and it sets how long a device can go without a time sync before the SDK adds an extra
+transmission. At **10 ppm** that is about three weeks, which is the figure the tutorial quotes. At 500
+it would be about eleven hours. Read the generated `.opt` file rather than the header.
+
+The header is left exactly as Hubble ships it, so this note lives here instead of in the source.
 
 ## Host test (no board needed)
 
