@@ -46,35 +46,35 @@
 /* Linear voltage-to-percent approximation, clamped to [0, 100]. */
 static inline uint8_t battery_percent(uint16_t battery_mv)
 {
-	if (battery_mv >= BATTERY_FULL_MV) {
-		return 100U;
-	}
-	if (battery_mv <= BATTERY_EMPTY_MV) {
-		return 0U;
-	}
+    if (battery_mv >= BATTERY_FULL_MV) {
+        return 100U;
+    }
+    if (battery_mv <= BATTERY_EMPTY_MV) {
+        return 0U;
+    }
 
-	uint32_t span = (uint32_t)(BATTERY_FULL_MV - BATTERY_EMPTY_MV);
-	uint32_t above = (uint32_t)(battery_mv - BATTERY_EMPTY_MV);
+    uint32_t span = (uint32_t)(BATTERY_FULL_MV - BATTERY_EMPTY_MV);
+    uint32_t above = (uint32_t)(battery_mv - BATTERY_EMPTY_MV);
 
-	return (uint8_t)((above * 100U) / span);
+    return (uint8_t)((above * 100U) / span);
 }
 
 static inline void pack_telemetry(uint8_t percent, uint16_t battery_mv,
-				  int16_t temp_c, uint8_t out[TELEMETRY_PAYLOAD_LEN])
+                  int16_t temp_c, uint8_t out[TELEMETRY_PAYLOAD_LEN])
 {
-	int16_t t = temp_c;
+    int16_t t = temp_c;
 
-	/* Temperature is carried in one signed byte; clamp to its range. */
-	if (t > 127) {
-		t = 127;
-	} else if (t < -128) {
-		t = -128;
-	}
+    /* Temperature is carried in one signed byte; clamp to its range. */
+    if (t > 127) {
+        t = 127;
+    } else if (t < -128) {
+        t = -128;
+    }
 
-	out[0] = percent;
-	out[1] = (uint8_t)(battery_mv >> 8);
-	out[2] = (uint8_t)(battery_mv & 0xFFU);
-	out[3] = (uint8_t)(int8_t)t; /* two's-complement byte */
+    out[0] = percent;
+    out[1] = (uint8_t)(battery_mv >> 8);
+    out[2] = (uint8_t)(battery_mv & 0xFFU);
+    out[3] = (uint8_t)(int8_t)t; /* two's-complement byte */
 }
 
 #endif /* TELEMETRY_H */

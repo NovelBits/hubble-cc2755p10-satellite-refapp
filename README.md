@@ -57,6 +57,16 @@ clang -std=c11 -Wall -Wextra -Werror test/test_pack.c -o /tmp/test_pack && /tmp/
 # expected: test_pack: all cases passed
 ```
 
+**This file is a superset of the one in the tutorial, so do not be surprised if it does not diff clean.**
+The tutorial publishes a deliberately short version: the four assertions that carry the most weight,
+flat in `main()`. The copy here splits them into `test_battery_percent()` and `test_pack()` and adds the
+boundary cases the walkthrough does not stop on: exactly at full and exactly at empty, 2850 mV landing on
+85 percent, both temperature clamps (`0x7F` and `0x80`), and a maximum-voltage case. Both versions
+compile under `-Werror` and both print the same line.
+
+Every other file here is byte-for-byte what the tutorial publishes, modulo nothing: the listings in the
+post use four-space indentation and so do these.
+
 ## Tutorial
 
 Full walkthrough: (link to the published Novel Bits tutorial)

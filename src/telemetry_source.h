@@ -28,10 +28,10 @@
  * value clamped to a signed byte (see pack_telemetry).
  */
 struct telemetry_reading {
-	uint16_t battery_mv;                    /* MEASURED, millivolts */
-	int16_t temp_c;                         /* MEASURED, whole degrees C */
-	uint8_t battery_pct;                    /* DERIVED, see telemetry.h */
-	uint8_t payload[TELEMETRY_PAYLOAD_LEN]; /* what actually goes on the air */
+    uint16_t battery_mv;                    /* MEASURED, millivolts */
+    int16_t temp_c;                         /* MEASURED, whole degrees C */
+    uint8_t battery_pct;                    /* DERIVED, see telemetry.h */
+    uint8_t payload[TELEMETRY_PAYLOAD_LEN]; /* what actually goes on the air */
 };
 
 /*
