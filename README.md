@@ -69,7 +69,17 @@ post use four-space indentation and so do these.
 
 ## Tutorial
 
-Full walkthrough: (link to the published Novel Bits tutorial)
+Full walkthrough: [Integrate Hubble's Satellite Network on Your TI CC2755P10 for Global Connectivity](https://novelbits.io/hubble-satellite-cc2755p10-tutorial/)
+
+<!-- F4 closed 2026-08-31. The canonical URL is in place AHEAD of publication so nothing has to be
+     remembered at go-live. It returns 404 until the post publishes (Wed 16 September 2026) and that
+     is expected: this repository is private until the same moment, so the only people who can see
+     this link before then are reviewers who already know the post is unpublished.
+
+     The slug is not a guess. It matches the Ghost draft's slug and Post #1's identical URL pattern
+     (https://novelbits.io/hubble-network-nrf54l15-tutorial/), which returns 200. Verified 2026-08-31.
+
+     DO NOT "fix" the 404 by removing the link. -->
 
 ## Licensing
 
