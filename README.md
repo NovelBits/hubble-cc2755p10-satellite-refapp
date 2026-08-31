@@ -71,13 +71,15 @@ post use four-space indentation and so do these.
 
 Full walkthrough: [Integrate Hubble's Satellite Network on Your TI CC2755P10 for Global Connectivity](https://novelbits.io/hubble-satellite-cc2755p10-tutorial/)
 
-<!-- F4 closed 2026-08-31. The canonical URL is in place AHEAD of publication so nothing has to be
-     remembered at go-live. It returns 404 until the post publishes (Wed 16 September 2026) and that
-     is expected: this repository is private until the same moment, so the only people who can see
-     this link before then are reviewers who already know the post is unpublished.
+<!-- The canonical tutorial URL is in place ahead of publication so it does not have to be
+     remembered at go-live. It returns 404 until the post publishes on Wed 16 September 2026.
+
+     ⚠️ This repository went PUBLIC on 2026-08-31, ahead of the post, so between now and publication
+     the link above is a public 404. That is known and accepted: the repo is not discoverable without
+     the draft, and the post's own parenthetical explaining the 404 was removed at the same time.
 
      The slug is not a guess. It matches the Ghost draft's slug and Post #1's identical URL pattern
-     (https://novelbits.io/hubble-network-nrf54l15-tutorial/), which returns 200. Verified 2026-08-31.
+     (https://novelbits.io/hubble-network-nrf54l15-tutorial/), which returns 200.
 
      DO NOT "fix" the 404 by removing the link. -->
 
